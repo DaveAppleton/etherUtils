@@ -55,3 +55,16 @@ func EtherToStr(bbal *big.Int) string {
 	}
 	return bb
 }
+
+// CoinToStr - convert coin from uCoins to fractional coin strings
+func CoinToStr(bbal *big.Int, numDec int) string {
+	fStr := fmt.Sprintf("%%0%dd", numDec)
+	bb := fmt.Sprintf(fStr, bbal)
+	if len(bb) == numDec {
+		bb = "0." + bb
+	} else {
+		l := len(bb)
+		bb = fmt.Sprintf("%s.%s", bb[:l-numDec], bb[l-numDec:])
+	}
+	return bb
+}

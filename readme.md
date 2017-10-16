@@ -31,3 +31,11 @@ EtherToString
 func EtherToStr(bbal *big.Int) string
 ```
 
+CoinToString
+---
+
+* Convert a value (in uCoins) to a Coin string
+
+```
+func CoinToStr(bbal *big.Int, numDec int) string
+```
