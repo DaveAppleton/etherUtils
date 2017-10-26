@@ -22,7 +22,7 @@ StrToEther
 func StrToEther(value string) (vInEther *big.Int, ok bool)
 ```
 
-EtherToString
+EtherToStr
 ---
 
 * Convert a value (in wei) to an ether string
@@ -39,3 +39,9 @@ CoinToString
 ```
 func CoinToStr(bbal *big.Int, numDec int) string
 ```
+
+StrToDecimals
+-------------
+
+* convert a string like "10.32" into the base units given the number of decimal places
+
