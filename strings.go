@@ -6,8 +6,7 @@ import (
 	"strings"
 )
 
-// EtherStrToWei converts 1.0 to 1000000000000000000000
-//                        0.1 to  100000000000000000000
+// StrToDecimals converts 1.0 to 1, 10, 100 etc depending on the decimals parameter
 func StrToDecimals(value string, decimals int64) (vInEther *big.Int, ok bool) {
 	v, ok := new(big.Int).SetString(value, 10)
 	//fmt.Println(v, ok)
@@ -41,19 +40,14 @@ func StrToDecimals(value string, decimals int64) (vInEther *big.Int, ok bool) {
 	return
 }
 
+// StrToEther - "1.0" -> 1 + 10 zeroes
 func StrToEther(value string) (vInEther *big.Int, ok bool) {
 	return StrToDecimals(value, 18)
 }
 
+// EtherToStr - given a number of wei, express it as a decimal amount of ether
 func EtherToStr(bbal *big.Int) string {
-	bb := fmt.Sprintf("%018d", bbal)
-	if len(bb) == 18 {
-		bb = "0." + bb
-	} else {
-		l := len(bb)
-		bb = fmt.Sprintf("%s.%s", bb[:l-18], bb[l-18:])
-	}
-	return bb
+	return CoinToStr(bbal, 18)
 }
 
 // CoinToStr - convert coin from uCoins to fractional coin strings
