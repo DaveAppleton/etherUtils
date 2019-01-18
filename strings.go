@@ -24,13 +24,12 @@ func StrToDecimals(value string, decimals int64) (vInEther *big.Int, ok bool) {
 		return
 	}
 	vInWholeEther := new(big.Int).Mul(v, powerInt)
+	if decimals < int64(len(strA[1])) {
+		strA[1] = strA[1][:decimals]
+	}
 	v2, ok := new(big.Int).SetString(strA[1], 10)
 	if !ok {
 		fmt.Println("2")
-		return
-	}
-	if decimals < int64(len(strA[1])) {
-		ok = false
 		return
 	}
 	pwr := new(big.Int).Exp(
