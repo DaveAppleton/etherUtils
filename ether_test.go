@@ -1,6 +1,7 @@
 package etherUtils
 
 import (
+	"fmt"
 	"math/big"
 	"testing"
 )
@@ -16,8 +17,12 @@ func TestStrToEther(t *testing.T) {
 		{Str: "1.0", Ui: 1000000000000000000, Ok: true},
 		{Str: "0.000000000000000001", Ui: 1, Ok: true},
 		{Str: "0.0000000000000000001", Ui: 0, Ok: false},
+		{Str: "1.00", Ui: 1000000000000000000, Ok: true},
+		{Str: "1.", Ui: 1000000000000000000, Ok: true},
+		{Str: "1", Ui: 1000000000000000000, Ok: true},
 	}
 	for _, rec := range testData {
+		fmt.Println(rec.Str)
 		val, ok := StrToEther(rec.Str)
 		if !ok && rec.Ok {
 			t.Error("cannot convert ", rec.Str)
@@ -26,7 +31,7 @@ func TestStrToEther(t *testing.T) {
 			continue
 		}
 		if !rec.Ok {
-			t.Error("False conversion ", rec.Str)
+			t.Error("False conversion ", rec.Str, val.String())
 		}
 		num := big.NewInt(rec.Ui)
 		if val.Cmp(num) != 0 {
@@ -38,7 +43,7 @@ func TestStrToEther(t *testing.T) {
 type testData2 struct {
 	Str string
 	Ui  int64
-	Dec int64
+	Dec int
 	Ok  bool
 }
 

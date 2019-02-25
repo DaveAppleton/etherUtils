@@ -7,10 +7,10 @@ import (
 )
 
 // StrToDecimals converts 1.0 to 1, 10, 100 etc depending on the decimals parameter
-func StrToDecimals(value string, decimals int64) (vInEther *big.Int, ok bool) {
+func StrToDecimals(value string, decimals int) (vInEther *big.Int, ok bool) {
 	v, ok := new(big.Int).SetString(value, 10)
 	//fmt.Println(v, ok)
-	powerInt := new(big.Int).Exp(big.NewInt(10), big.NewInt(decimals), nil)
+	powerInt := new(big.Int).Exp(big.NewInt(10), big.NewInt(int64(decimals)), nil)
 	if ok {
 		vInEther = new(big.Int).Mul(v, powerInt)
 		return
@@ -19,12 +19,19 @@ func StrToDecimals(value string, decimals int64) (vInEther *big.Int, ok bool) {
 	if len(strA) != 2 {
 		strA = append(strA, "0")
 	}
+	if len(strA[1]) == 0 {
+		strA[1] = "0"
+	}
+	if len(strA[1]) > decimals {
+		ok = false
+		return
+	}
 	v, ok = new(big.Int).SetString(strA[0], 10)
 	if !ok {
 		return
 	}
 	vInWholeEther := new(big.Int).Mul(v, powerInt)
-	if decimals < int64(len(strA[1])) {
+	if decimals < len(strA[1]) {
 		strA[1] = strA[1][:decimals]
 	}
 	v2, ok := new(big.Int).SetString(strA[1], 10)
@@ -34,7 +41,7 @@ func StrToDecimals(value string, decimals int64) (vInEther *big.Int, ok bool) {
 	}
 	pwr := new(big.Int).Exp(
 		bi(10),
-		bi(int(decimals-int64(len(strA[1])))),
+		bi(int(decimals-len(strA[1]))),
 		nil)
 	vInPartEther := new(big.Int).Mul(v2, pwr)
 	vInEther = new(big.Int).Add(vInWholeEther, vInPartEther)
